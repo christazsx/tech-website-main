@@ -1,0 +1,1003 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoreTeck CMS | Powering the Future of Scripted Content</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0F1121',
+                        darker: '#080A17',
+                        neonBlue: '#4361EE',
+                        neonViolet: '#7209B7',
+                        lightGray: '#E2E8F0'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0F1121;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #4361EE 0%, #7209B7 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #4361EE, #7209B7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(67, 97, 238, 0.2), 0 10px 10px -5px rgba(114, 9, 183, 0.1);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, #4361EE, #7209B7);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #4361EE, #7209B7);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(67, 97, 238, 0.3), 0 4px 6px -2px rgba(114, 9, 183, 0.2);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .section-divider {
+            height: 5px;
+            background: linear-gradient(90deg, #4361EE, #7209B7);
+            border-radius: 5px;
+            width: 150px;
+            margin: 0 auto;
+        }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4361EE 0%, #7209B7 100%);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span id="toast-message">Message sent successfully!</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-dark/90 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold gradient-text">CoreTeck CMS</div>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="nav-link text-white hover:text-neonBlue transition">Home</a>
+                <a href="#services" class="nav-link text-white hover:text-neonBlue transition">Services</a>
+                <a href="#analytics" class="nav-link text-white hover:text-neonBlue transition">Analytics</a>
+                <a href="#team" class="nav-link text-white hover:text-neonBlue transition">Team</a>
+                <a href="#contact" class="nav-link text-white hover:text-neonBlue transition">Contact</a>
+            </div>
+            
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-darker border-b border-gray-800">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="#home" class="text-white hover:text-neonBlue transition">Home</a>
+                <a href="#services" class="text-white hover:text-neonBlue transition">Services</a>
+                <a href="#analytics" class="text-white hover:text-neonBlue transition">Analytics</a>
+                <a href="#team" class="text-white hover:text-neonBlue transition">Team</a>
+                <a href="#contact" class="text-white hover:text-neonBlue transition">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center pt-20 pb-16 bg-darker">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 animate-fadeIn">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                        Powering the Future of <span class="gradient-text">Scripted Content</span>
+                    </h1>
+                    <p class="text-xl text-gray-300 mb-8 animate-fadeIn delay-100">
+                        Centralized tools, teams, and tech to grow the Roblox exploit space
+                    </p>
+                    <div class="flex flex-wrap gap-4 animate-fadeIn delay-200">
+                        <a href="#team" class="btn-primary px-8 py-3 rounded-full font-medium">
+                            Join the Network
+                        </a>
+                        <a href="#contact" class="btn-secondary px-8 py-3 rounded-full font-medium border border-gray-700">
+                            Hire Us
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 animate-fadeIn delay-300">
+                    <div class="relative">
+                        <!-- Forum Logo SVG -->
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full max-w-lg mx-auto">
+                            <defs>
+                                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#4361EE" />
+                                    <stop offset="100%" stop-color="#7209B7" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="100" cy="100" r="90" fill="#0F1121" stroke="url(#logoGradient)" stroke-width="4" />
+                            <!-- Forum Icon Elements -->
+                            <rect x="50" y="60" width="100" height="15" rx="5" fill="url(#logoGradient)" />
+                            <rect x="50" y="85" width="100" height="10" rx="5" fill="#4361EE" opacity="0.7" />
+                            <rect x="50" y="105" width="80" height="10" rx="5" fill="#7209B7" opacity="0.7" />
+                            <rect x="50" y="125" width="60" height="10" rx="5" fill="#4361EE" opacity="0.7" />
+                            <!-- User Icon -->
+                            <circle cx="160" cy="140" r="15" fill="url(#logoGradient)" />
+                            <path d="M160 132 C155 132 151 136 151 141 C151 146 155 150 160 150 C165 150 169 146 169 141 C169 136 165 132 160 132 Z" fill="#0F1121" />
+                            <path d="M150 155 C150 150 155 146 160 146 C165 146 170 150 170 155" stroke="#0F1121" stroke-width="3" fill="none" />
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-5xl md:text-7xl font-bold text-white">
+                                CoreTeck
+                                <div class="text-3xl md:text-4xl text-right pr-8">CMS</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Do Section -->
+    <section id="services" class="py-20 bg-dark">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">What We Do</h2>
+                <div class="section-divider mb-8"></div>
+                <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+                    CoreTeck CMS is the backbone of Roblox content creation tools, script publishing, and video team management. 
+                    We provide AI bots, SEO tools, and branded script hubs.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1 -->
+                <div class="card bg-darker rounded-xl p-6 border border-gray-800">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Script Distribution</h3>
+                    <p class="text-gray-400">
+                        Centralized platform for publishing, managing, and distributing Roblox scripts with analytics and version control.
+                    </p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="card bg-darker rounded-xl p-6 border border-gray-800">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Video Production Tools</h3>
+                    <p class="text-gray-400">
+                        Professional templates, editing resources, and workflow management for content creators in our network.
+                    </p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="card bg-darker rounded-xl p-6 border border-gray-800">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">AI Assistant</h3>
+                    <p class="text-gray-400">
+                        Advanced AI tools for SEO optimization, title generation, and content recommendations to maximize visibility.
+                    </p>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="card bg-darker rounded-xl p-6 border border-gray-800">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Creator Management</h3>
+                    <p class="text-gray-400">
+                        Comprehensive network management for video editors, uploaders, and social media managers with performance tracking.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Brand Highlight -->
+            <div class="mt-20 bg-darker rounded-xl p-8 border border-gray-800">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/3 mb-6 md:mb-0">
+                        <div class="gradient-text text-2xl font-bold mb-2">Featured Brand</div>
+                        <h3 class="text-3xl font-bold mb-4">Script Nexus</h3>
+                        <p class="text-gray-400">
+                            Our premier script distribution platform with advanced features for creators and users alike.
+                        </p>
+                    </div>
+                    <div class="md:w-2/3 md:pl-10">
+                        <div class="bg-dark rounded-xl p-6 border border-gray-800">
+                            <div class="flex items-center justify-center">
+                                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-40 h-40">
+                                    <path fill="#7209B7" d="M47.7,-73.2C62.9,-66.7,77.1,-56.2,83.9,-42.1C90.8,-28,90.3,-10.3,86.6,5.4C82.9,21.2,76,34.9,66.4,46.4C56.8,57.9,44.5,67.1,30.8,72.3C17.1,77.5,2,78.7,-12.4,76.1C-26.8,73.6,-40.5,67.3,-51.9,57.5C-63.3,47.8,-72.3,34.6,-77.2,19.8C-82.1,5,-82.8,-11.5,-77.4,-25.2C-72,-38.9,-60.5,-49.8,-47.2,-57.1C-33.9,-64.4,-17,-68.1,-0.6,-67.2C15.8,-66.3,32.5,-60.8,47.7,-73.2Z" transform="translate(100 100)" />
+                                </svg>
+                                <div class="absolute text-3xl font-bold">Script Nexus</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section id="analytics" class="py-20 bg-darker">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Performance</h2>
+                <div class="section-divider mb-8"></div>
+            </div>
+            
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-2/3 bg-dark rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-semibold mb-4">Script Views Growth</h3>
+                    <div class="h-80">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/3">
+                    <div class="bg-dark rounded-xl p-6 border border-gray-800 mb-8">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-gray-400 text-sm">Total Script Views</div>
+                                <div class="text-3xl font-bold gradient-text">10M+</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-400">
+                            Our scripts have been viewed over 10 million times across all platforms.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-dark rounded-xl p-6 border border-gray-800">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-gray-400 text-sm">Active Creators</div>
+                                <div class="text-3xl font-bold gradient-text">50+</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-400">
+                            Over 50 active creators managed under our brand network.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team & Hiring Section -->
+    <section id="team" class="py-20 bg-dark">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Join Our Team</h2>
+                <div class="section-divider mb-8"></div>
+                <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+                    We're always looking for talented individuals to join our growing network of creators.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <!-- Role 1 -->
+                <div class="card bg-darker rounded-xl p-6 border border-gray-800">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Uploader</h3>
+                    <p class="text-gray-400 mb-4">
+                        Upload and SEO-optimize videos using our AI tools to maximize reach and engagement.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue rounded-full text-xs">SEO</span>
+                        <span class="px-3 py-1 bg-neonViolet/20 text-neonViolet rounded-full text-xs">YouTube</span>
+                        <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue rounded-full text-xs">AI Tools</span>
+                    </div>
+                </div>
+                
+                <!-- Role 2 -->
+                <div class="card bg-darker rounded-xl p-6 border border-gray-800">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Video Editor</h3>
+                    <p class="text-gray-400 mb-4">
+                        Edit content using provided footage and templates to create engaging videos.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue rounded-full text-xs">Premiere Pro</span>
+                        <span class="px-3 py-1 bg-neonViolet/20 text-neonViolet rounded-full text-xs">After Effects</span>
+                        <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue rounded-full text-xs">Templates</span>
+                    </div>
+                </div>
+                
+                <!-- Role 3 -->
+                <div class="card bg-darker rounded-xl p-6 border border-gray-800">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Social Media Manager</h3>
+                    <p class="text-gray-400 mb-4">
+                        Moderate forums, grow Twitter/YouTube, and post updates to engage our community.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue rounded-full text-xs">Forums</span>
+                        <span class="px-3 py-1 bg-neonViolet/20 text-neonViolet rounded-full text-xs">Twitter</span>
+                        <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue rounded-full text-xs">Community</span>
+                    </div>
+                </div>
+                
+                <!-- Role 4 -->
+                <div class="card bg-darker rounded-xl p-6 border border-gray-800">
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Showcaser</h3>
+                    <p class="text-gray-400 mb-4">
+                        Record short gameplay showcasing scripts to demonstrate features and capabilities.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue rounded-full text-xs">Roblox</span>
+                        <span class="px-3 py-1 bg-neonViolet/20 text-neonViolet rounded-full text-xs">OBS</span>
+                        <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue rounded-full text-xs">Gameplay</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Application Form -->
+            <div class="bg-darker rounded-xl p-8 border border-gray-800 max-w-3xl mx-auto">
+                <h3 class="text-2xl font-bold mb-6 text-center">Apply to Join CoreTeck</h3>
+                
+                <form id="application-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-gray-300 mb-1">Desired Role</label>
+                        <select id="role" name="role" class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white" required>
+                            <option value="">Select a role</option>
+                            <option value="Uploader">Uploader</option>
+                            <option value="Video Editor">Video Editor</option>
+                            <option value="Social Media Manager">Social Media Manager</option>
+                            <option value="Showcaser">Showcaser</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="experience" class="block text-sm font-medium text-gray-300 mb-1">Experience</label>
+                        <textarea id="experience" name="experience" rows="4" class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white" required></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="portfolio" class="block text-sm font-medium text-gray-300 mb-1">Portfolio URL (Optional)</label>
+                        <input type="url" id="portfolio" name="portfolio" class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white">
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" id="submit-application" class="btn-primary px-8 py-3 rounded-full font-medium">
+                            Submit Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-darker">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+                <div class="section-divider mb-8"></div>
+                <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+                    Have questions or want to work with us? Reach out through any of our channels.
+                </p>
+            </div>
+            
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-1/2">
+                    <div class="bg-dark rounded-xl p-8 border border-gray-800 h-full">
+                        <h3 class="text-2xl font-bold mb-6">Contact Us</h3>
+                        
+                        <form id="contact-form" class="space-y-6">
+                            <div>
+                                <label for="contact-name" class="block text-sm font-medium text-gray-300 mb-1">Your Name</label>
+                                <input type="text" id="contact-name" name="contact-name" class="w-full px-4 py-2 bg-darker border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white" required>
+                            </div>
+                            
+                            <div>
+                                <label for="contact-email" class="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
+                                <input type="email" id="contact-email" name="contact-email" class="w-full px-4 py-2 bg-darker border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white" required>
+                            </div>
+                            
+                            <div>
+                                <label for="subject" class="block text-sm font-medium text-gray-300 mb-1">Subject</label>
+                                <input type="text" id="subject" name="subject" class="w-full px-4 py-2 bg-darker border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white" required>
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-300 mb-1">Message</label>
+                                <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 bg-darker border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neonBlue text-white" required></textarea>
+                            </div>
+                            
+                            <div>
+                                <button type="submit" id="submit-contact" class="btn-primary px-8 py-3 rounded-full font-medium w-full">
+                                    Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div class="bg-dark rounded-xl p-8 border border-gray-800 mb-8">
+                        <h3 class="text-2xl font-bold mb-6">Connect With Us</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 text-sm">Email Us At</div>
+                                    <a href="mailto:contact@coreteckcms.com" class="text-white hover:text-neonBlue transition">contact@coreteckcms.com</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center mr-4">
+                                    <!-- Forum Icon -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h10z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 text-sm">Community Forum</div>
+                                    <a href="https://coreteck.webforum.club/" class="text-white hover:text-neonBlue transition">Join Our Community</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 text-sm">YouTube</div>
+                                    <a href="#" class="text-white hover:text-neonBlue transition">@CoreTeckCMS</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-gray-400 text-sm">Twitter</div>
+                                    <a href="#" class="text-white hover:text-neonBlue transition">@CoreTeckCMS</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-dark rounded-xl p-8 border border-gray-800">
+                        <h3 class="text-2xl font-bold mb-6">Join Our Community</h3>
+                        <div class="bg-darker rounded-lg p-6 border border-gray-700 text-center">
+                            <!-- Forum Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-16 w-16 mx-auto mb-4 text-neonBlue" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" />
+                                <line x1="2" y1="8" x2="22" y2="8" stroke="currentColor" />
+                                <line x1="6" y1="6" x2="6" y2="6.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <line x1="10" y1="6" x2="10" y2="6.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <line x1="14" y1="6" x2="14" y2="6.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <rect x="5" y="11" width="14" height="2" rx="1" fill="currentColor" opacity="0.5" />
+                                <rect x="5" y="15" width="10" height="2" rx="1" fill="currentColor" opacity="0.5" />
+                            </svg>
+                            <p class="text-gray-300 mb-6">
+                                Join our community forum to connect with other creators, get support, and stay updated.
+                            </p>
+                            <a href="https://coreteck.webforum.club/" class="btn-primary px-8 py-3 rounded-full font-medium inline-block">
+                                Join Community
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-dark border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="text-2xl font-bold gradient-text mb-2">CoreTeck CMS</div>
+                    <p class="text-gray-400">
+                        Powering the future of scripted content.
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
+                    <a href="#home" class="text-gray-300 hover:text-white transition">Home</a>
+                    <a href="#services" class="text-gray-300 hover:text-white transition">Services</a>
+                    <a href="#analytics" class="text-gray-300 hover:text-white transition">Analytics</a>
+                    <a href="#team" class="text-gray-300 hover:text-white transition">Team</a>
+                    <a href="#contact" class="text-gray-300 hover:text-white transition">Contact</a>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="https://coreteck.webforum.club/" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-300 hover:bg-neonBlue hover:text-white transition">
+                        <!-- Forum Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h10z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-300 hover:bg-neonBlue hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-300 hover:bg-neonBlue hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">
+                    CoreTeck CMS © 2025. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+        
+        // Show toast notification
+        function showToast(message, success = true) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.style.background = success ? 'linear-gradient(135deg, #4361EE 0%, #7209B7 100%)' : '#ef4444';
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+        
+        // Discord webhook integration for application form
+        document.getElementById('application-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const role = document.getElementById('role').value;
+            const experience = document.getElementById('experience').value;
+            const portfolio = document.getElementById('portfolio').value || 'Not provided';
+            
+            // Change button to loading state
+            const submitButton = document.getElementById('submit-application');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = '<div class="spinner"></div> Submitting...';
+            submitButton.disabled = true;
+            
+            // Prepare data for Discord webhook
+            const webhookData = {
+                embeds: [{
+                    title: "New Job Application",
+                    color: 4886754, // Discord color format (hex to decimal)
+                    fields: [
+                        {
+                            name: "Name",
+                            value: name,
+                            inline: true
+                        },
+                        {
+                            name: "Email",
+                            value: email,
+                            inline: true
+                        },
+                        {
+                            name: "Role",
+                            value: role,
+                            inline: true
+                        },
+                        {
+                            name: "Experience",
+                            value: experience,
+                            inline: false
+                        },
+                        {
+                            name: "Portfolio",
+                            value: portfolio,
+                            inline: false
+                        }
+                    ],
+                    footer: {
+                        text: "CoreTeck CMS Application Form"
+                    },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+            
+            // Send to Discord webhook
+            fetch('https://discord.com/api/webhooks/1376887222602698752/7l5lBVPFkamel3bsBJq_48WNwdjk_g_YjRRh9Z8psMdmS3soS9kUumTtAPWgCNVZ_Nku', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(webhookData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    showToast('Application submitted successfully! We will contact you soon.', true);
+                    this.reset();
+                } else {
+                    showToast('There was an error submitting your application. Please try again.', false);
+                }
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('There was an error submitting your application. Please try again.', false);
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+            });
+        });
+        
+        // Contact form submission with Discord webhook
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Change button to loading state
+            const submitButton = document.getElementById('submit-contact');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.innerHTML = '<div class="spinner"></div> Sending...';
+            submitButton.disabled = true;
+            
+            // Prepare data for Discord webhook
+            const webhookData = {
+                embeds: [{
+                    title: "New Contact Form Message",
+                    color: 4886754, // Discord color format (hex to decimal)
+                    fields: [
+                        {
+                            name: "Name",
+                            value: name,
+                            inline: true
+                        },
+                        {
+                            name: "Email",
+                            value: email,
+                            inline: true
+                        },
+                        {
+                            name: "Subject",
+                            value: subject,
+                            inline: false
+                        },
+                        {
+                            name: "Message",
+                            value: message,
+                            inline: false
+                        }
+                    ],
+                    footer: {
+                        text: "CoreTeck CMS Contact Form"
+                    },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+            
+            // Send to Discord webhook
+            fetch('https://discord.com/api/webhooks/1376890891427381258/BqiHdfrZkzkalf4lXTDMoajt-4AyohCVL45E42d9AmYUzjfd2KwocHQXKtYvfnYCA7Qr', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(webhookData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    showToast('Message sent successfully! We will respond as soon as possible.', true);
+                    this.reset();
+                } else {
+                    showToast('There was an error sending your message. Please try again.', false);
+                }
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('There was an error sending your message. Please try again.', false);
+                submitButton.innerHTML = originalButtonText;
+                submitButton.disabled = false;
+            });
+        });
+        
+        // Analytics Chart
+        window.addEventListener('load', function() {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(67, 97, 238, 0.6)');
+            gradient.addColorStop(1, 'rgba(114, 9, 183, 0.1)');
+            
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Script Views (Millions)',
+                        data: [0.4, 0.6, 0.8, 1.2, 1.5, 2.1, 2.8, 3.5, 4.2, 5.0, 6.8, 10.0],
+                        borderColor: '#4361EE',
+                        backgroundColor: gradient,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#7209B7',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#0F1121',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#4361EE',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw + 'M views';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeIn');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.card, .section-divider, h2, h3').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9465766ad7e4bc46',t:'MTc0ODM0ODM4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
